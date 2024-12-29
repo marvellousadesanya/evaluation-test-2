@@ -1,11 +1,19 @@
 import Image from "next/image";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { completeStep, setActiveStep } from "@/store/slices/formSlice";
+import {
+  completeStep,
+  setActiveStep,
+  setFormComplete,
+} from "@/store/slices/formSlice";
 
 export default function Confirmation() {
-  const { accountDetails, selectedProfession, selectedSpecialization } =
-    useAppSelector((state) => state.form);
+  const {
+    accountDetails,
+    selectedProfession,
+    selectedSpecialization,
+    uploadedImage,
+  } = useAppSelector((state) => state.form);
   const dispatch = useAppDispatch();
 
   const handleNext = (e: React.FormEvent) => {
@@ -13,10 +21,12 @@ export default function Confirmation() {
 
     dispatch(completeStep(3));
     dispatch(setActiveStep(5));
+    dispatch(setFormComplete());
   };
 
   const handleEdit = (e: React.FormEvent) => {
     e.preventDefault();
+
     dispatch(completeStep(3));
     dispatch(setActiveStep(2));
   };
@@ -29,13 +39,16 @@ export default function Confirmation() {
         </p>
 
         <div className="space-y-7">
-          <Image
-            src={"/Avatar.png"}
-            width={50}
-            height={50}
-            alt={"Avatar"}
-            className="py-5"
-          />
+          <div className="relative rounded-full overflow-hidden h-12 w-12">
+            <Image
+              src={uploadedImage.previewUrl || "/Avatar.png"}
+              alt="Avatar"
+              fill
+              className="object-cover"
+              sizes="(max-width: 48px) 100vw"
+              priority
+            />
+          </div>
 
           <div className="grid grid-cols-2 gap-5 w-full">
             <div className="">

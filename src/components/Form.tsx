@@ -10,7 +10,9 @@ import Confirmation from "./Confirmation";
 import Complete from "./Complete";
 
 export default function Form() {
-  const { steps, currentStep } = useAppSelector((state) => state.form);
+  const { steps, currentStep, isFormComplete } = useAppSelector(
+    (state) => state.form
+  );
 
   const renderStep = () => {
     switch (currentStep) {
@@ -50,8 +52,9 @@ export default function Form() {
     <>
       <div className="bg-white flex justify-center items-center py-24  h-full w-full">
         <div className="w-[692px] overflow-hidden">
-          <FormSteps steps={steps} currentStep={currentStep} />
-
+          {!isFormComplete && (
+            <FormSteps steps={steps} currentStep={currentStep} />
+          )}
           {renderStep()}
         </div>
       </div>

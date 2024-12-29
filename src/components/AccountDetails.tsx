@@ -68,7 +68,6 @@ export default function AccountDetails() {
       errors.password = "Password must be at least 8 characters";
     }
 
-    // Password match validation
     if (accountDetails.password !== accountDetails.confirmPassword) {
       errors.confirmPassword = "Passwords do not match";
     }
@@ -211,31 +210,7 @@ export default function AccountDetails() {
             )}
           </div>
 
-          {/* <div className="flex flex-col gap-2">
-            <label htmlFor="language" className="text-[#111928] text-sm">
-              Select language
-            </label>
-            <select
-              id="language"
-              name="language"
-              value={accountDetails.language}
-              onChange={handleChange}
-              className={getInputClassName("language")}>
-              <option value="" disabled>
-                Select a language
-              </option>
-              {languageOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            {formErrors.language && (
-              <span className="text-red-500 text-xs">
-                {formErrors.language}
-              </span>
-            )}
-          </div> */}
+          {/* // This is for the multipple select */}
           <MultiSelectLanguage
             languages={languageOptions}
             selectedLanguages={accountDetails.languages}

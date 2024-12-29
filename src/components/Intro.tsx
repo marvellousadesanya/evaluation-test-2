@@ -24,45 +24,17 @@ export default function Intro() {
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate that a specialization is selected
     if (!selectedSpecialization) {
       alert("Please select a specialization before proceeding");
       return;
     }
 
-    // Mark current step as complete and move to next step
     dispatch(completeStep(1));
     dispatch(setActiveStep(2));
   };
 
   return (
     <div className="px-2 w-[692px]">
-      {/* <div className="flex justify-between  w-full">
-        <div className="text-sm font-semibold text-[#fea37b] flex flex-col justify-center items-center">
-          <p className="">1</p>
-          <p className="">Personal info</p>
-        </div>
-        <div className="text-sm flex flex-col justify-center items-center">
-          <p>2</p>
-          <Image
-            src="/complete.png"
-            alt="complete"
-            width={2}
-            height={2}
-            className="w-full h-full object-contain"
-          />
-          <p>Account info</p>
-        </div>
-        <div className="text-sm flex flex-col justify-center items-center">
-          <p>3</p>
-          <p>File upload</p>
-        </div>
-        <div className="text-sm flex flex-col justify-center items-center">
-          <p>4</p>
-          <p>Confirmation</p>
-        </div>
-      </div> */}
-
       <div className="pt-12 pb-5">
         <p className="font-bold text-2xl text-[#111928]">
           Tell us about yourself

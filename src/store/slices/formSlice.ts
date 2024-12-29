@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 const FORM_STORAGE_KEY = "form_state";
 const FINAL_STEP = 5;
 
-// Helper functions for localStorage
 const loadState = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
   try {
     const serializedState = localStorage.getItem(FORM_STORAGE_KEY);
     if (serializedState === null) {
@@ -16,18 +19,22 @@ const loadState = () => {
     return undefined;
   }
 };
-
 const saveState = (state: FormState) => {
+  if (typeof window === "undefined") {
+    return;
+  }
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem(FORM_STORAGE_KEY, serializedState);
   } catch (err) {
-    // Handle potential errors
     console.error("Failed to save state to localStorage:", err);
   }
 };
 
 const clearState = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
   try {
     localStorage.removeItem(FORM_STORAGE_KEY);
   } catch (err) {
@@ -53,7 +60,7 @@ interface UploadedImage {
   name: string;
   size: number;
   type: string;
-  file: string | null | ArrayBuffer | File;
+  file: string | null | ArrayBuffer | StaticImport | File;
   previewUrl: string | null;
   uploadProgress: number;
   isUploading: boolean;
@@ -69,6 +76,7 @@ interface FormState {
   accountDetails: AccountDetails;
   formErrors: Record<string, string>;
   uploadedImage: UploadedImage;
+  isFormComplete: boolean;
   steps: {
     number: number;
     label: string;
@@ -107,6 +115,7 @@ const initialState: FormState = loadState() || {
     uploadProgress: 0,
     isUploading: false,
   },
+  isFormComplete: false,
   steps: [
     { number: 1, label: "Personal info", isCompleted: false, isActive: true },
     { number: 2, label: "Account info", isCompleted: false, isActive: false },
@@ -207,7 +216,8 @@ const formSlice = createSlice({
         name: string;
         size: number;
         type: string;
-        file: string | null | ArrayBuffer | File;
+        file: string | null | ArrayBuffer | File | StaticImport;
+        // file: string | StaticImport | null;
         previewUrl: string | null;
       }>
     ) => {
@@ -235,9 +245,13 @@ const formSlice = createSlice({
       state.uploadedImage.uploadProgress = action.payload;
       saveState(state);
     },
+    setFormComplete: (state) => {
+      state.isFormComplete = true;
+      clearState();
+    },
     resetForm: () => {
       clearState();
-      return initialState;
+      return { ...initialState, isFormComplete: false };
     },
   },
 });
@@ -254,6 +268,7 @@ export const {
   setUploadProgress,
   setUploadedImageData,
   setUploadStatus,
+  setFormComplete,
   resetForm,
 } = formSlice.actions;
 
